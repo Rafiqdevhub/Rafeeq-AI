@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Github, Linkedin, Twitter, Mail } from "lucide-react";
 
 const Footer = () => {
@@ -75,8 +76,9 @@ const Footer = () => {
       <div className="section-container py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           <div className="space-y-4 lg:col-span-1">
-            <Link href="/" className="text-xl font-bold block">
-              Rafeeq AI
+            <Link href="/" className="flex items-center gap-2">
+              <Image src="/logo.svg" alt="Rafeeq AI" width={32} height={32} />
+              <span className="text-xl font-bold">Rafeeq AI</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               Your intelligent study companion that connects you with the right
