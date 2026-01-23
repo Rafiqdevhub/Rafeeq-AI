@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Suspense } from "react";
 import "./globals.css";
 import HeaderWrapper from "@/components/layout/headerWrapper";
 import Footer from "@/components/layout/Footer";
@@ -26,7 +27,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${outfitFont.className} antialiased`}>
           <HeaderWrapper />
-          {children}
+          <Suspense fallback={null}>{children}</Suspense>
           <Footer />
         </body>
       </html>

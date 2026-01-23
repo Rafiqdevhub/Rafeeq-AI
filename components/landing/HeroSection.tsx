@@ -1,4 +1,4 @@
-import { RocketIcon, SparkleIcon, ZapIcon } from "lucide-react";
+import { RocketIcon, ZapIcon } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { HeroGradient } from "./BackgroundGradient";
 import Link from "next/link";
@@ -12,7 +12,7 @@ export default function HeroSection() {
       <div className="relative section-container section-padding">
         <div className="text-center">
           <Badge className="mb-6 text-sm font-medium" variant="secondary">
-            Powered by AI <SparkleIcon className="size-4 inline-block ml-2" />
+            Powered by AI
           </Badge>
           <h1>
             Find Your Perfect{" "}
