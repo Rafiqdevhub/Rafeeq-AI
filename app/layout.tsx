@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import HeaderWrapper from "@/components/layout/headerWrapper";
 import Footer from "@/components/layout/Footer";
+import QueryProvider from "@/components/provider/QueryProvider";
 
 const outfitFont = Outfit({
   subsets: ["latin"],
@@ -26,9 +27,11 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${outfitFont.className} antialiased`}>
-          <HeaderWrapper />
-          <Suspense fallback={null}>{children}</Suspense>
-          <Footer />
+          <QueryProvider>
+            <HeaderWrapper />
+            <Suspense fallback={null}>{children}</Suspense>
+            <Footer />
+          </QueryProvider>
         </body>
       </html>
     </ClerkProvider>
