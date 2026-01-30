@@ -58,7 +58,7 @@ A modern AI-powered learning community platform that connects learners with comp
 ### AI & LLM
 
 - **Vercel AI SDK** - Unified AI framework
-- **OpenAI** - GPT models for intelligent matching and summarization
+- **Google Generative AI (Gemini 2.5 Flash)** - LLM for matching and summarization
 - **Custom AI Functions**:
   - User matching algorithm
   - Conversation summarization
@@ -75,7 +75,6 @@ A modern AI-powered learning community platform that connects learners with comp
 
 - **ESLint** - Code quality
 - **TypeScript** - Type safety
-- **Tailwind PostCSS** - CSS processing
 - **TSX** - TypeScript executor for scripts
 
 ## Database Schema
@@ -124,7 +123,6 @@ rafeeq-ai/
 │   ├── ai.ts                   # AI/LLM functions
 │   ├── apiClient.ts            # HTTP client
 │   ├── dbHelpers.ts            # Database queries
-│   ├── userUtils.ts            # User utilities
 │   └── utils.ts                # General utilities
 └── public/                      # Static assets
 ```
@@ -135,7 +133,7 @@ rafeeq-ai/
 
 - Node.js 18+ (recommended 20+)
 - PostgreSQL database
-- OpenAI API key
+- Google Generative AI API key
 - Clerk account for authentication
 
 ### Installation
@@ -169,8 +167,8 @@ rafeeq-ai/
    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_key
    CLERK_SECRET_KEY=your_clerk_secret
 
-   # OpenAI
-   OPENAI_API_KEY=your_openai_api_key
+   # Google Generative AI
+   GOOGLE_GENERATIVE_AI_API_KEY=your_gemini_api_key
    ```
 
 4. **Initialize the database**
@@ -212,7 +210,7 @@ bun run lint         # Run ESLint
 
 ### AI Matching Algorithm
 
-The matching system uses OpenAI to analyze:
+The matching system uses Google Generative AI (Gemini 2.5 Flash) to analyze:
 
 - User learning goals
 - Skill levels
@@ -227,7 +225,7 @@ After each conversation, the system automatically:
 
 - Generates a summary of discussion points
 - Extracts key takeaways
-- Identifies action items
+  The matching system uses Google Generative AI (Gemini 2.5 Flash) to analyze:
 - Suggests next steps
 
 ### Real-Time Communication
@@ -279,7 +277,7 @@ Ensure all environment variables are set in your deployment platform:
 - `DATABASE_URL` - Production PostgreSQL connection
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` - Clerk public key
 - `CLERK_SECRET_KEY` - Clerk secret key
-- `OPENAI_API_KEY` - OpenAI API key
+- `GOOGLE_GENERATIVE_AI_API_KEY` - Google Generative AI API key
 
 ## Contributing
 
@@ -294,4 +292,4 @@ For issues, questions, or suggestions, please reach out to the development team.
 
 ---
 
-**Built with ❤️ using Next.js, AI, and modern web technologies**
+- `GOOGLE_GENERATIVE_AI_API_KEY` - Google Generative AI API key

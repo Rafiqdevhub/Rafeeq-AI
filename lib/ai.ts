@@ -1,5 +1,5 @@
 import { generateText } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import {
   createMatch,
   getGoalsByUserAndCommunity,
@@ -13,6 +13,15 @@ import { getOrCreateUserByClerkId } from "./userUtils";
 import { conversationSummaries, learningGoals, messages } from "@/db/schema";
 import { db } from "@/db";
 import { desc, eq } from "drizzle-orm";
+
+const googleApiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+
+if (!googleApiKey) {
+  throw new Error("GOOGLE_GENERATIVE_AI_API_KEY is not set");
+}
+
+const google = createGoogleGenerativeAI({ apiKey: googleApiKey });
+const GEMINI_MODEL = "gemini-2.5-flash";
 
 export const aiMatchUsers = async (
   user: NonNullable<Awaited<ReturnType<typeof getOrCreateUserByClerkId>>>,
@@ -129,7 +138,7 @@ Example: [2, 5, 1] means partner #2 is the best match, then #5, then #1.
 Only return an empty array [] if there are truly NO partners with any related learning interests.`;
 
     const { text } = await generateText({
-      model: openai("gpt-4o-mini"),
+      model: google(GEMINI_MODEL),
       prompt,
     });
 
@@ -233,7 +242,7 @@ Please format your response as JSON with this structure:
   //invoke AI
   try {
     const { text } = await generateText({
-      model: openai("gpt-4o-mini"),
+      model: google(GEMINI_MODEL),
       prompt,
     });
 

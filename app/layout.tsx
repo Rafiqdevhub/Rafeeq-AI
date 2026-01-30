@@ -6,6 +6,7 @@ import "./globals.css";
 import HeaderWrapper from "@/components/layout/headerWrapper";
 import Footer from "@/components/layout/Footer";
 import QueryProvider from "@/components/provider/QueryProvider";
+import { Toaster } from "sonner";
 
 const outfitFont = Outfit({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
             <Suspense fallback={null}>{children}</Suspense>
             <Footer />
           </QueryProvider>
+          <Toaster position="top-right" richColors />
         </body>
       </html>
     </ClerkProvider>
