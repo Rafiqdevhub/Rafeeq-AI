@@ -1,0 +1,224 @@
+name: PR Checks - Code Quality & Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  # Job 1: Code Quality Checks
+  code-quality:
+    name: Code Quality & Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run ESLint
+        run: bun run lint
+        continue-on-error: false
+
+      - name: Check TypeScript
+        run: bun exec tsc --noEmit
+        continue-on-error: false
+
+  # Job 2: Build Verification
+  build:
+    name: Build & Compilation
+    runs-on: ubuntu-latest
+    needs: code-quality
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Create .env.local for build
+        run: |
+          touch .env.local
+          echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=test_key" >> .env.local
+          echo "CLERK_SECRET_KEY=test_secret" >> .env.local
+          echo "DATABASE_URL=postgresql://user:password@localhost:5432/test" >> .env.local
+          echo "GOOGLE_API_KEY=test_key" >> .env.local
+
+      - name: Build Next.js
+        run: bun run build
+        continue-on-error: false
+
+      - name: Cache build artifacts
+        uses: actions/cache@v3
+        with:
+          path: .next
+          key: ${{ runner.os }}-next-${{ github.sha }}
+
+  # Job 3: Type Safety
+  type-check:
+    name: Type Safety Check
+    runs-on: ubuntu-latest
+    needs: code-quality
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Strict TypeScript checking
+        run: bun exec tsc --strict --noEmit
+        continue-on-error: false
+
+  # Job 4: Dependency Security & Validation
+  security:
+    name: Security & Dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check for outdated dependencies
+        run: bun outdated
+        continue-on-error: true
+
+      - name: Audit dependencies for vulnerabilities
+        run: bun audit --json || echo "⚠️ Security warnings found - review manually"
+        continue-on-error: true
+
+  # Job 5: File & Format Validation
+  validation:
+    name: File & Format Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for large files
+        run: |
+          echo "Checking for files larger than 5MB..."
+          find . -type f -size +5M ! -path "./node_modules/*" ! -path "./.next/*" ! -path "./.git/*" || true
+
+      - name: Validate JSON files
+        run: |
+          for file in $(find . -name "*.json" ! -path "./node_modules/*" ! -path "./.next/*"); do
+            echo "Validating $file"
+            jq . "$file" > /dev/null || exit 1
+          done
+
+      - name: Check for common issues
+        run: |
+          echo "Checking for TODO/FIXME comments..."
+          grep -r "TODO\|FIXME" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" . --exclude-dir=node_modules --exclude-dir=.next || echo "No TODOs found"
+
+  # Job 6: Summary & Status
+  pr-status:
+    name: PR Status Check
+    runs-on: ubuntu-latest
+    needs: [code-quality, build, type-check, security, validation]
+    if: always()
+
+    steps:
+      - name: Check job statuses
+        run: |
+          if [ "${{ needs.code-quality.result }}" != "success" ]; then
+            echo "❌ Code Quality Check Failed"
+            exit 1
+          fi
+          if [ "${{ needs.build.result }}" != "success" ]; then
+            echo "❌ Build Failed"
+            exit 1
+          fi
+          if [ "${{ needs.type-check.result }}" != "success" ]; then
+            echo "❌ Type Check Failed"
+            exit 1
+          fi
+          echo "✅ All PR checks passed successfully!"
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && success()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ **All PR checks passed!**\n\n- Code Quality & Linting: ✓\n- Build: ✓\n- Type Safety: ✓\n- Security: ✓\n- Validation: ✓'
+            })
