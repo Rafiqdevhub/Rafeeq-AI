@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { communityMembers, learningGoals, matches, users } from "@/db/schema";
 import { eq, and, sql, inArray, ne, desc } from "drizzle-orm";
 
-export const getCommunityMembers = async (communityId: string) => {};
+export const getCommunityMembers = async () => {};
 
 export const getGoalsByUserAndCommunity = async (
   userId: string,

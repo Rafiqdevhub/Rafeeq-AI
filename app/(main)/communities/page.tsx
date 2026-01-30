@@ -20,17 +20,9 @@ export default function CommunitiesPage() {
   const [selectedCommunity, setSelectedCommunity] = useState<string | null>(
     null,
   );
-  const {
-    data: communities,
-    isLoading: isLoadingCommunities,
-    error: errorCommunities,
-  } = useCommunities();
+  const { data: communities } = useCommunities();
 
-  const {
-    data: communityGoals,
-    isLoading: isLoadingCommunityGoals,
-    error: errorCommunityGoals,
-  } = useCommunityGoals(selectedCommunity);
+  const { data: communityGoals } = useCommunityGoals(selectedCommunity);
 
   useEffect(() => {
     if (communities && communities.length > 0 && !selectedCommunity) {
@@ -38,7 +30,7 @@ export default function CommunitiesPage() {
         setSelectedCommunity(communities[0].community.id);
       });
     }
-  }, [communities?.length]);
+  }, [communities, selectedCommunity]);
 
   const numberOfCommunities = communities?.length || 0;
 

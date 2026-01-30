@@ -11,7 +11,6 @@ export const UserAvatar = ({
   size?: "sm" | "md";
 }) => {
   const initials = name?.[0]?.toUpperCase() || "U";
-  const displayName = name || "User";
   return (
     <Avatar
       className={cn(

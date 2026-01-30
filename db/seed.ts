@@ -525,7 +525,7 @@ async function comprehensiveSeed() {
     console.log("   ✓ Database cleared\n");
     // 1. Create FREE users
     console.log("👥 Creating FREE USERS (demonstrating tier limits)...");
-    const createdFreeUsers: any[] = [];
+    const createdFreeUsers: (typeof users.$inferSelect)[] = [];
     for (const user of freeUsers) {
       const [created] = await db.insert(users).values(user).returning();
       createdFreeUsers.push(created);
@@ -534,7 +534,7 @@ async function comprehensiveSeed() {
 
     // 2. Create PRO users
     console.log("\n👥 Creating PRO USERS (unlimited access)...");
-    const createdProUsers: any[] = [];
+    const createdProUsers: (typeof users.$inferSelect)[] = [];
     for (const user of proUsers) {
       const [created] = await db.insert(users).values(user).returning();
       createdProUsers.push(created);
@@ -545,7 +545,7 @@ async function comprehensiveSeed() {
 
     // 3. Create communities
     console.log("\n🏘️  Creating communities...");
-    const createdCommunities: any[] = [];
+    const createdCommunities: (typeof communities.$inferSelect)[] = [];
     for (const community of communitiesData) {
       const [created] = await db
         .insert(communities)
@@ -593,7 +593,7 @@ async function comprehensiveSeed() {
 
     // 6. Create template learning goals for each community
     console.log("\n📚 Creating template learning goals...");
-    const createdGoals: any[] = [];
+    const createdGoals: (typeof learningGoals.$inferSelect)[] = [];
     for (const [communityName, goals] of Object.entries(learningGoalsData)) {
       const community = createdCommunities.find(
         (c) => c.name === communityName,

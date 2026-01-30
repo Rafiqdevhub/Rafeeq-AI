@@ -37,12 +37,13 @@ export default function GlobalNotFound() {
 
                 <div className="space-y-3">
                   <p className="text-lg text-muted-foreground">
-                    Oops! It looks like you've ventured into uncharted
-                    territory. The page you're searching for doesn't exist.
+                    Oops! It looks like you&apos;ve ventured into uncharted
+                    territory. The page you&apos;re searching for doesn&apos;t
+                    exist.
                   </p>
                   <p className="text-base text-muted-foreground/80">
-                    But don't worry! Get back on track and discover the perfect
-                    learning partners to help you reach your goals.
+                    But don&apos;t worry! Get back on track and discover the
+                    perfect learning partners to help you reach your goals.
                   </p>
                 </div>
 

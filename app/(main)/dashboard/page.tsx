@@ -63,11 +63,7 @@ const DashboardPage = () => {
     enabled: !!userCommunities?.length,
   });
 
-  const {
-    data: matches,
-    isLoading: isLoadingMatches,
-    error: errorMatches,
-  } = useMatches();
+  const { data: matches } = useMatches();
 
   if (isLoadingUserCommunities) return <div>Loading...</div>;
   if (errorUserCommunities)

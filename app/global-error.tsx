@@ -44,7 +44,7 @@ export default function GlobalError({
                   </h1>
                   <p className="text-lg text-muted-foreground">
                     We encountered an unexpected error. Our team has been
-                    notified and we're working to fix it.
+                    notified and we&apos;re working to fix it.
                   </p>
                 </div>
 

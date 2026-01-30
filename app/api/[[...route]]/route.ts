@@ -57,14 +57,14 @@ app.use("/*", async (c, next) => {
   return await next();
 });
 
-const routes = app
+app
   .route("/communities", communitiesApp)
   .route("/communities", learningGoalsApp)
   .route("/matches", matchesApp)
   .route("/conversations", conversationsApp)
   .route("/user", userApp);
 
-export type AppType = typeof routes;
+export type AppType = typeof app;
 
 export const GET = handle(app);
 export const POST = handle(app);
