@@ -36,7 +36,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       - name: Extract metadata
         id: meta
@@ -65,7 +65,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
           repository: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}
           short-description: Rafeeq AI - Next.js Application with AI Integration
           description: |
