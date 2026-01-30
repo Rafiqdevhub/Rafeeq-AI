@@ -4,11 +4,13 @@ on:
   pull_request:
     branches:
       - main
+      - master
       - develop
     types: [opened, synchronize, reopened]
   push:
     branches:
       - main
+        - master
       - develop
 
 concurrency:
