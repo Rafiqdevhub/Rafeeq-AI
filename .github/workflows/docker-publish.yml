@@ -5,12 +5,7 @@ on:
     branches:
       - main
       - develop
-    paths:
-      - "Dockerfile"
-      - "package*.json"
-      - "src/**"
-      - "app/**"
-      - ".github/workflows/push-image-docker-hub.yml"
+
   workflow_dispatch:
 
 env:
