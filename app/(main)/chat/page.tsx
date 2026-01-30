@@ -6,6 +6,7 @@ import { UserAvatar } from "@/components/ui/userAvatar";
 import { useAcceptMatch, useMatches } from "@/hooks/useAIPartner";
 import { useCurrentUser } from "@/hooks/useUsers";
 import { useRouter } from "next/navigation";
+import type { Match, Goal } from "@/lib/types";
 
 const ChatPage = () => {
   const {
@@ -25,9 +26,11 @@ const ChatPage = () => {
   if (errorMatches) return <div>Error: {errorMatches.message}</div>;
 
   const acceptedMatches = matches?.filter(
-    (match) => match.status === "accepted",
+    (match: Match) => match.status === "accepted",
   );
-  const pendingMatches = matches?.filter((match) => match.status === "pending");
+  const pendingMatches = matches?.filter(
+    (match: Match) => match.status === "pending",
+  );
 
   let pendingMatchesToShow = [];
   if (!isPro) {
@@ -44,7 +47,7 @@ const ChatPage = () => {
       <h2 className="text-2xl font-semibold">Pending Matches</h2>
 
       <div className="flex gap-4 overflow-x-scroll">
-        {pendingMatchesToShow?.map((match) => {
+        {pendingMatchesToShow?.map((match: Match) => {
           const partner = {
             id: match.partner.id || "",
             name: match.partner.name || "Partner",
@@ -78,7 +81,7 @@ const ChatPage = () => {
                         Their Learning Goals:
                       </p>
                       <div className="space-y-2">
-                        {match.partnerGoals.map((g) => (
+                        {match.partnerGoals.map((g: Goal) => (
                           <Badge
                             key={g.id}
                             variant="secondary"
@@ -108,7 +111,7 @@ const ChatPage = () => {
 
       <h2 className="text-2xl font-semibold">Active Chats</h2>
       <div className="flex gap-4 overflow-x-scroll flex-col">
-        {acceptedMatches?.map((match) => {
+        {acceptedMatches?.map((match: Match) => {
           const partner = {
             id: match.partner.id || "",
             name: match.partner.name || "Partner",
@@ -135,13 +138,15 @@ const ChatPage = () => {
                     {match.userGoals && (
                       <span className="text-xs text-muted-foreground">
                         Your goals:{" "}
-                        {match.userGoals.map((g) => g.title).join(", ")}
+                        {match.userGoals.map((g: Goal) => g.title).join(", ")}
                       </span>
                     )}
                     {match.partnerGoals && match.partnerGoals.length > 0 && (
                       <span className="text-xs text-muted-foreground">
                         Their goals:{" "}
-                        {match.partnerGoals.map((g) => g.title).join(", ")}
+                        {match.partnerGoals
+                          .map((g: Goal) => g.title)
+                          .join(", ")}
                       </span>
                     )}
                   </div>

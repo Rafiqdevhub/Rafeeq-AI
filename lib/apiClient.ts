@@ -1,4 +1,5 @@
 import { hc } from "hono/client";
 import type { AppType } from "@/app/api/[[...route]]/route";
 
-export const client = hc<AppType>("");
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const client: any = hc<AppType>("");

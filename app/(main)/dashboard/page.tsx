@@ -15,6 +15,7 @@ import { useUser } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 import { MessageCircleIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
+import type { Match, Community } from "@/lib/types";
 
 const DashboardPage = () => {
   const user = useUser();
@@ -45,10 +46,10 @@ const DashboardPage = () => {
   });
 
   const pendingMatchesData = allMatches?.filter(
-    (match) => match.status === "pending",
+    (match: Match) => match.status === "pending",
   );
   const activeMatchesData = allMatches?.filter(
-    (match) => match.status === "accepted",
+    (match: Match) => match.status === "accepted",
   );
 
   const { data: learningGoals } = useQuery({
@@ -132,7 +133,7 @@ const DashboardPage = () => {
 
           <CardContent>
             <div className="flex flex-col gap-3">
-              {matches?.map((match) => (
+              {matches?.map((match: Match) => (
                 <Link href={`/chat/${match.id}`} key={match.id}>
                   <Card className="shadow-none">
                     <CardHeader>
@@ -180,7 +181,7 @@ const DashboardPage = () => {
 
           <CardContent>
             <div className="space-y-3">
-              {userCommunities?.map((community) => (
+              {userCommunities?.map((community: Community) => (
                 <Card className="shadow-none" key={community.id}>
                   <Link href={`/communities/${community.id}`}>
                     <CardHeader>

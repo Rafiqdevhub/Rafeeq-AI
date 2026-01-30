@@ -566,6 +566,8 @@ async function comprehensiveSeed() {
         (c) => c.name === assignment.community,
       );
 
+      if (!user || !community) continue;
+
       await db.insert(communityMembers).values({
         userId: user.id,
         communityId: community.id,
@@ -579,10 +581,14 @@ async function comprehensiveSeed() {
       proUserCommunityAssignments,
     )) {
       const user = allUsers.find((u) => u.name === userName);
+      if (!user) continue;
+
       for (const communityName of communityNames) {
         const community = createdCommunities.find(
           (c) => c.name === communityName,
         );
+        if (!community) continue;
+
         await db.insert(communityMembers).values({
           userId: user.id,
           communityId: community.id,
@@ -593,11 +599,15 @@ async function comprehensiveSeed() {
 
     // 6. Create template learning goals for each community
     console.log("\n📚 Creating template learning goals...");
-    const createdGoals: (typeof learningGoals.$inferSelect)[] = [];
+    const createdGoals: (typeof learningGoals.$inferSelect & {
+      communityName: string;
+    })[] = [];
     for (const [communityName, goals] of Object.entries(learningGoalsData)) {
       const community = createdCommunities.find(
         (c) => c.name === communityName,
       );
+      if (!community) continue;
+
       for (const goal of goals) {
         const [created] = await db
           .insert(learningGoals)
@@ -626,6 +636,8 @@ async function comprehensiveSeed() {
           g.communityName === assignment.community,
       );
 
+      if (!user || !community || !templateGoal) continue;
+
       await db.insert(learningGoals).values({
         userId: user.id,
         communityId: community.id,
@@ -642,12 +654,15 @@ async function comprehensiveSeed() {
       proUserGoalAssignments,
     )) {
       const user = allUsers.find((u) => u.name === userName);
+      if (!user) continue;
+
       let totalGoals = 0;
 
       for (const [communityName, goalTitles] of Object.entries(communities)) {
         const community = createdCommunities.find(
           (c) => c.name === communityName,
         );
+        if (!community) continue;
 
         for (const goalTitle of goalTitles) {
           const templateGoal = createdGoals.find(

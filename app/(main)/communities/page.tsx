@@ -14,6 +14,7 @@ import { useCommunities, useCommunityGoals } from "@/hooks/useCommunities";
 import { useCurrentUser } from "@/hooks/useUsers";
 import { LockIcon } from "lucide-react";
 import { startTransition, useEffect, useState } from "react";
+import type { Community, Goal } from "@/lib/types";
 
 export default function CommunitiesPage() {
   const [activeTab, setActiveTab] = useState<"goals" | "matches">("goals");
@@ -52,7 +53,7 @@ export default function CommunitiesPage() {
           <CardDescription>{communities?.length} joined</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
-          {communities?.map((c) => (
+          {communities?.map((c: Community) => (
             <Button
               key={c.community.id}
               className="w-full justify-start"
@@ -101,7 +102,7 @@ export default function CommunitiesPage() {
         <CardContent>
           {activeTab === "goals" ? (
             <div className="space-y-2">
-              {communityGoals?.map((c) => (
+              {communityGoals?.map((c: Goal) => (
                 <Card key={c.id} className="shadow-none">
                   <CardHeader>
                     <CardTitle className="text-base">{c.title}</CardTitle>

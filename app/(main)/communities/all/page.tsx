@@ -16,6 +16,7 @@ import {
 } from "@/hooks/useCommunities";
 import { toast } from "sonner";
 import { useCurrentUser } from "@/hooks/useUsers";
+import type { Community, CommunityItem } from "@/lib/types";
 
 export default function AllCommunitiesPage() {
   const {
@@ -32,7 +33,7 @@ export default function AllCommunitiesPage() {
 
   const isJoined = (communityId: string) => {
     return userCommunities?.some(
-      (community) => community.community.id === communityId,
+      (community: Community) => community.community.id === communityId,
     );
   };
 
@@ -60,7 +61,7 @@ export default function AllCommunitiesPage() {
       <div className="space-y-4 mt-4">
         <h2 className="text-2xl font-bold"> Browse Communities</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {allCommunities?.map((community) => (
+          {allCommunities?.map((community: CommunityItem) => (
             <Card key={community.id}>
               <CardHeader>
                 <CardTitle>{community.name}</CardTitle>

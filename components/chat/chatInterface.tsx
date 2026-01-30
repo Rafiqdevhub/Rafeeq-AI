@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import type { Message } from "@/lib/types";
 import {
   Card,
   CardContent,
@@ -59,7 +60,6 @@ const ChatInterface = ({ matchId }: { matchId: string }) => {
         ":conversationId"
       ].messages.$post({
         param: { conversationId: conversation?.id ?? "" },
-        // @ts-expect-error - content is not defined in the API client
         json: { content: message },
       });
       if (!res.ok) {
@@ -145,7 +145,7 @@ const ChatInterface = ({ matchId }: { matchId: string }) => {
             </div>
           </CardHeader>
           <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages?.map((message) => {
+            {messages?.map((message: Message) => {
               const isCurrentUser =
                 message.senderId === conversation.currentUserId;
               const user = isCurrentUser
@@ -252,13 +252,15 @@ const ChatInterface = ({ matchId }: { matchId: string }) => {
                   <div>
                     <h4 className="font-medium mb-2">Action Items</h4>
                     <div className="space-y-2">
-                      {summary.actionItems.map((item, index: number) => (
-                        <div key={index} className="flex items-start gap-2">
-                          <ul className="flex-1 list-disc list-inside">
-                            <li className="text-sm">{item}</li>
-                          </ul>
-                        </div>
-                      ))}
+                      {summary.actionItems.map(
+                        (item: string, index: number) => (
+                          <div key={index} className="flex items-start gap-2">
+                            <ul className="flex-1 list-disc list-inside">
+                              <li className="text-sm">{item}</li>
+                            </ul>
+                          </div>
+                        ),
+                      )}
                     </div>
                   </div>
                 )}
